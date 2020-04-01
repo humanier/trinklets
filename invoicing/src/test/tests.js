@@ -87,17 +87,12 @@ const testCases = {
             deactivatedOn: null,
             customerId: 1,
         },
-    ],
+    ],    
     noUsers: []
 
 }
 
 describe('billFor', function () {
-    it('works when the customer has no active users during the month', function () {
-        // closeTo parameters -> actual, expected, tolerance
-        assert.closeTo(main.billFor('2019-01', testCases.plan, testCases.noUsers), 0.00, 0.01);
-    });
-
     itParam('returns zero when subscription info is not provided ${value.desc}',
         [
             { desc: 'null', plan: null },
@@ -151,6 +146,18 @@ describe('billFor', function () {
                 plan: testCases.plan,
                 expected: 0.13
             },
+            {
+                desc: 'customer has no active users during the month',
+                users: [],
+                plan: testCases.plan, 
+                expected: 0.0
+            },
+            {
+                desc: 'number of users does not change during month',
+                users: testCases.constantUsers,
+                plan: testCases.plan,
+                expected: 8
+            }
         ],
         value => {
             // ACT
